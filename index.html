@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Hug Day Rishita 🤗</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "poppins", sans-serif;
+}
+
+body {
+  height: 100vh;
+  background: linear-gradient(135deg, #ff758c, #ff7eb3, #fad0c4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  color: white;
+}
+
+/* Floating Hearts */
+.heart {
+  position: absolute;
+  bottom: -20px;
+  font-size: 20px;
+  animation: float 6s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes float {
+  100% {
+    transform: translateY(-110vh) scale(1.8);
+    opacity: 0;
+  }
+}
+
+/* Glass Card */
+.card {
+  width: 90%;
+  max-width: 380px;
+  padding: 25px;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+  text-align: center;
+  animation: fadeIn 0.8s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+img.photo {
+  width: 200px;
+  border-radius: 20px;
+  margin: 10px 0;
+}
+
+.hug-gif {
+  width: 160px;
+  margin: 10px 0;
+  border-radius: 15px;
+}
+
+/* Buttons */
+button {
+  margin-top: 12px;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 30px;
+  background: white;
+  color: #ff4b5c;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.05);
+  background: #ffe0e6;
+}
+
+.counter {
+  margin-top: 8px;
+  font-size: 23px;
+}
+
+.message {
+  margin-top: 10px;
+  font-size: 21px;
+  min-height: 40px;
+  opacity: 0.9;
+}
+
+/* Hug Meter */
+.meter {
+  width: 100%;
+  height: 10px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 20px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  width: 0%;
+  background: white;
+  transition: 0.4s;
+}
+
+.hidden { display: none; }
+
+.final-bg {
+  background: linear-gradient(
+    135deg,
+    #1b1b2f,
+    #2c2c54,
+    #3f1d38
+  );
+  transition: background 1s ease;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Floating Hearts -->
+<script>
+for(let i=0;i<20;i++){
+  let h=document.createElement("div");
+  h.className="heart";
+  h.innerHTML="💖";
+  h.style.left=Math.random()*100+"vw";
+  h.style.animationDuration=(4+Math.random()*3)+"s";
+  document.body.appendChild(h);
+}
+</script>
+
+<!-- Sounds -->
+<audio id="bgMusic" loop>
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="hugSound">
+  <source src="hug.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="finalMusic" loop>
+  <source src="soft.mp3" type="audio/mpeg">
+</audio>
+
+<!-- SCREEN 1 -->
+<div id="screen1" class="card">
+  <h1>I wanna hug you ☺️🫶🏻</h1>
+  <h3>Rishita bby🥹❤️</h3>
+  <img class="photo" src="photo1.jpg">
+  <p>You are my comfort place 💞</p>
+  <button onclick="startGame()">Start Hugging</button>
+</div>
+
+<!-- SCREEN 2 -->
+<div id="screen2" class="card hidden">
+  <h2>Level 1 💗</h2>
+  <img class="hug-gif" src="hug.gif">
+
+  <button onclick="hug(1)">🤗 Hug</button>
+  <div class="counter" id="count1">Hugs: 0 / 5</div>
+
+  <div class="meter"><div class="fill" id="fill1"></div></div>
+  <div class="message" id="msg1"></div>
+</div>
+
+<!-- SCREEN 3 -->
+<div id="screen3" class="card hidden">
+  <h2>Level 2 💞</h2><br>
+  Not satisfied I want more hugs🥰🤭
+ 
+  <img class="hug-gif" src="hug.gif">
+
+  <button onclick="hug(2)">🤗 Hug</button>
+  <div class="counter" id="count2">Hugs: 0 / 8</div>
+
+  <div class="meter"><div class="fill" id="fill2"></div></div>
+  <div class="message" id="msg2"></div>
+</div>
+
+<!-- SCREEN 4 -->
+<div id="screen4" class="card hidden">
+  <h1>Ek last Hug 💖</h1>
+
+  <img class="hug-gif" src="hug.gif">
+  <p>
+    Rishita suno🥹❤️ <br><br>
+    If hugs could speak,<br>
+    mine would say —<br>
+    *Stay forever with me* 😌🥹🫶🏻
+  </p>
+</div>
+
+<script>
+let hugs1 = 0;
+let hugs2 = 0;
+
+const messages = [
+  "Soft cuddles for my love 💞",
+  "Come here Rishita 🤗",
+  "Holding you tight ❤️",
+  "Warmest hug ever 💗",
+  "Never letting go 😌",
+  "My favourite human 💕"
+];
+
+function randomMsg() {
+  return messages[Math.floor(Math.random()*messages.length)];
+}
+
+function startGame(){
+  screen1.classList.add("hidden");
+  screen2.classList.remove("hidden");
+  bgMusic.play();
+}
+
+function vibrate(){
+  if(navigator.vibrate){
+    navigator.vibrate(80);   // vibration duration
+  }
+}
+
+function hug(level){
+
+  clearTimeout(window.hugTimer);
+
+hugSound.currentTime = 0;
+hugSound.play();
+
+window.hugTimer = setTimeout(() => {
+  hugSound.pause();
+  hugSound.currentTime = 0;
+}, 2000);
+
+   vibrate();
+
+ 
+
+  if(level === 1){
+    hugs1++;
+    count1.innerText = `Hugs: ${hugs1} / 5`;
+    fill1.style.width = (hugs1/5)*100 + "%";
+    msg1.innerText = randomMsg();
+
+    if(hugs1 >= 5){
+      screen2.classList.add("hidden");
+      screen3.classList.remove("hidden");
+    }
+  }                
+
+  if(level === 2){
+    hugs2++;
+    count2.innerText = `Hugs: ${hugs2} / 8`;
+    fill2.style.width = (hugs2/8)*100 + "%";
+    msg2.innerText = randomMsg();
+
+   if(hugs2 >= 8){
+
+  screen3.classList.add("hidden");
+  screen4.classList.remove("hidden");
+  
+  document.body.classList.add("final-bg");
+
+  // Stop background music
+  bgMusic.pause();
+  bgMusic.currentTime = 0;
+
+  // Stop hug sound if playing
+  hugSound.pause();
+  hugSound.currentTime = 0;
+
+  // Play soft final music
+  finalMusic.currentTime = 0;
+  finalMusic.play();
+  
+  // Stop after 16 seconds
+setTimeout(() => {
+  finalMusic.pause();
+  finalMusic.currentTime = 0;
+}, 16000);
+ }
+ }
+}
+</script>
+
+</body>
+</html>
